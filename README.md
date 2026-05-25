@@ -2,6 +2,36 @@
 
 Fine-tuning Llama 3.1 8B to automatically convert doctor-patient conversation transcripts into structured clinical notes using QLoRA.
 
+## The Problem: Documentation Burden in Healthcare
+After every patient visit, doctors are required to produce a detailed clinical note documenting the encounter. These notes typically include structured sections such as the Chief Complaint, History of Present Illness, Physical Examination findings, Assessment, and Plan. This documentation is essential for continuity of care, medical billing, legal compliance, and communication between healthcare providers.
+
+However, writing these notes is one of the most time-consuming and tedious parts of a physician's day. Studies have shown that doctors spend nearly two hours on documentation for every one hour of direct patient care. Many physicians end up completing their notes after clinic hours — a practice so widespread it has earned the name "pajama time" in the medical community. This administrative burden is a leading driver of physician burnout, contributes to reduced face-to-face time with patients, and ultimately impacts the quality of care delivered.
+
+## The Approach
+In this project, I fine-tune Meta-Llama-3.1-8B-Instruct — a state-of-the-art open-source LLM — on the ACI-Bench dataset, which contains real doctor-patient conversation transcripts paired with gold-standard clinical notes. I use QLoRA (Quantized Low-Rank Adaptation) to make fine-tuning feasible on a single GPU by training only ~0.5-1% of the model's parameters while keeping the rest frozen in 4-bit precision.
+
+Our goal is to take a raw conversation transcript like this:
+```
+[doctor] hi, how are you feeling today?
+[patient] i've been having this persistent cough for about two weeks...
+[doctor] any fever, shortness of breath, or chest pain?
+[patient] no fever, but i do feel short of breath when i climb stairs...
+```
+And automatically generate a structured clinical note like this:
+```
+CHIEF COMPLAINT
+Persistent cough for two weeks.
+
+HISTORY OF PRESENT ILLNESS
+Patient is a 45-year-old female presenting with a two-week history
+of persistent cough with associated dyspnea on exertion...
+
+PHYSICAL EXAMINATION
+Lungs clear to auscultation bilaterally. No wheezing...
+
+ASSESSMENT AND PLAN
+Post-viral cough. Prescribe cough suppressant...
+```
 ---
 
 ## Prerequisites
